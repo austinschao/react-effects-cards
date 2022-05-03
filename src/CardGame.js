@@ -17,6 +17,7 @@ function CardGame() {
   const [cards, setCards] = useState([]);
   // {success: true, deck_id:, shuffled: true, remaining: 52}
   const [deck, setDeck] = useState(null);
+  // const [shuffling, setShuffling] = useState(false)
 
   /** Getting a deck upon first rendering */
   useEffect(function addDeck() {
@@ -36,12 +37,25 @@ function CardGame() {
     setCards(prevCards => [...prevCards, cardData.data]);
   }
 
+  /** shuffle deck */
+async function shuffleDeck(){
+  const response = await axios.get(`${BASE_API_URL}${deck.deck_id}/shuffle`);
+  setDeck(response.data);
+  setCards([]);
+}
+
+
 
   if (deck === null) return <p>Loading...</p>;
 
   return (
     <div>
       <div>
+        <div>
+          <button className="card-shuffle-btn" onClick={shuffleDeck}>
+            Shuffle
+          </button>
+          </div>
         {cards.length && cards.map(card => <Card card={card.cards[0]} key={card.cards[0].code} />)}
       </div>
       <div>
