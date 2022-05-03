@@ -17,22 +17,47 @@ function CardGame() {
   /** Getting a deck upon mounting */
   useEffect(function addDeck() {
     async function getDeck() {
-      const deck = axios.get("http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
+      const deck = await axios.get("http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
       setDeck(deck.data);
-      console.log(deck)
     }
     getDeck()
   }, [])
 
   /** Drawing a card */
-  useEffect(function drawCardOnChange() {
     async function drawCard() {
+      const cardData = await axios.get(`http://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=1`)
+      setCard(cardData.data)
+  }
+// 
 
+function handleClick(evt){
+    evt.preventDefault()
+    if(card.remaining === 0){
+      alert("Error: no cards remaining!")
+      setCard("")
+    } else{
+      drawCard();
     }
-  })
+  }
+
+  if (deck.length === 0) return <p>Loading...</p>;
+
+  return (
+    <form>
+      <div>
+        {card && 
+        card.cards[0].image }
+      </div>
+        <div className="mb-3 d-flex justify-content-between">
+          <button className="btn-primary rig btn btn-sm CardGame-addBtn" onClick={handleClick}>
+            Get Card!
+          </button>
+       </div>
+    </form>
+  );
 }
 
-
+export default CardGame;
 
 
 
