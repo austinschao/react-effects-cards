@@ -19,8 +19,10 @@ function CardGame() {
     async function getDeck() {
       const deck = axios.get("http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
       setDeck(deck.data);
+      console.log(deck)
     }
-  })
+    getDeck()
+  }, [])
 
   /** Drawing a card */
   useEffect(function drawCardOnChange() {
